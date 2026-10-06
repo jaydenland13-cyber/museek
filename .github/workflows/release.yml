@@ -1,0 +1,40 @@
+# Builds Museek.exe on GitHub's servers and publishes it as a Release whenever you push a version tag, e.g.:
+#   git tag v1.0.1
+#   git push origin v1.0.1
+# The tag number becomes the app's version, so the in-app updater can compare it.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publish single-file exe
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          dotnet publish Museek.csproj -c Release -r win-x64 --self-contained true \
+            -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
+            -p:PublishReadyToRun=true -p:DebugType=none -p:DebugSymbols=false \
+            -p:Version="$VERSION" -o publish
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: publish/Museek.exe
+          generate_release_notes: true
+          # Source repo private but releases public? Uncomment and add a token secret named RELEASES_TOKEN:
+          # repository: YOURNAME/Museek-releases
+          # token: ${{ secrets.RELEASES_TOKEN }}

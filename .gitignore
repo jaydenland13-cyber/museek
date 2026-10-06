@@ -1,0 +1,18 @@
+# build output
+bin/
+obj/
+publish/
+.vs/
+*.user
+
+# YOUR private files - never commit these (they hold your logins / keys)
+settings.json
+.spotify_cache
+.env
+crash_log.txt
+museek_log.txt
+
+# updater leftovers
+Museek.update.tmp
+*.old
+Museek.exe
