@@ -36,5 +36,5 @@ jobs:
           files: publish/Museek.exe
           generate_release_notes: true
           # Source repo private but releases public? Uncomment and add a token secret named RELEASES_TOKEN:
-          # repository: YOURNAME/Museek-releases
+          # repository: jaydenland13-cyber/Museek-releases
           # token: ${{ secrets.RELEASES_TOKEN }}
